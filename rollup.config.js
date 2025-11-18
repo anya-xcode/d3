@@ -4,7 +4,6 @@ import nodeResolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 import meta from "./package.json" assert {type: "json"};
 
-// Extract copyrights from the LICENSE.
 const copyright = readFileSync("./LICENSE", "utf-8")
   .split(/\n/g)
   .filter(line => /^Copyright\s+/.test(line))

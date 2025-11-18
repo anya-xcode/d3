@@ -60,15 +60,9 @@ class Element {
   removeAttributeNS(namespace, name) {
     this.removeAttribute(name);
   }
-  addEventListener() {
-    // ignored; interaction needs real DOM
-  }
-  removeEventListener() {
-    // ignored; interaction needs real DOM
-  }
-  dispatchEvent() {
-    // ignored; interaction needs real DOM
-  }
+  addEventListener() {}
+  removeEventListener() {}
+  dispatchEvent() {}
   appendChild(child) {
     this.children.push(child);
     child.parentNode = this;
@@ -119,9 +113,9 @@ class TextNode {
   }
 }
 
-// Converts the real DOM to virtual DOM (for client-side hydration).
+// Converts DOM to virtual DOM for hydration.
 function toHyperScript(node) {
-  if (node.nodeType === 3) return node.nodeValue; // TextNode
+  if (node.nodeType === 3) return node.nodeValue;
   const props = {};
   for (const name of node.getAttributeNames()) props[name] = node.getAttribute(name);
   const children = [];
@@ -141,16 +135,16 @@ export default {
     const options = {
       ...(method === "plot" && {
         marks: this.mark == null ? [] : [this.mark],
-        width: 688 // better default for VitePress
+        width: 688
       }),
       ...this.options,
       className: "plot"
     };
     if (this.defer) {
       const mounted = (el) => {
-        disconnect(); // remove old listeners
+        disconnect();
         function observed() {
-          unmounted(el); // remove old plot (and listeners)
+          unmounted(el);
           el.append(Plot[method](options));
         }
         const rect = el.getBoundingClientRect();

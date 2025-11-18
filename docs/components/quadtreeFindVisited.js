@@ -1,4 +1,4 @@
-// An instrumented version of quadtree.find that shows the visited nodes.
+// Instrumented quadtree.find showing visited nodes.
 export default function quadtree_findVisited(x, y, radius) {
   var visited = [],
       x0 = this._x0,
@@ -23,8 +23,6 @@ export default function quadtree_findVisited(x, y, radius) {
   }
 
   while ((q = quads.pop())) {
-
-    // Stop searching if this quadrant can’t contain a closer node.
     if (!(node = q.node)
         || (x1 = q.x0) > x3
         || (y1 = q.y0) > y3
@@ -33,13 +31,10 @@ export default function quadtree_findVisited(x, y, radius) {
 
     visited.push(q);
 
-    // Bisect the current quadrant.
     if (node.length) {
       var xm = (x1 + x2) / 2,
           ym = (y1 + y2) / 2;
 
-      // 0 1
-      // 2 3
       quads.push(
         new Quad(node[3], xm, ym, x2, y2, 1, 1, q.dx1 - 1, q.dy1 - 1),
         new Quad(node[2], x1, ym, xm, y2, q.dx0 + 1, 1, -1, q.dy1 - 1),
@@ -47,16 +42,12 @@ export default function quadtree_findVisited(x, y, radius) {
         new Quad(node[0], x1, y1, xm, ym, q.dx0 + 1, q.dy0 + 1, -1, -1)
       );
 
-      // Visit the closest quadrant first.
       if ((i = (y >= ym) << 1 | (x >= xm))) {
         q = quads[quads.length - 1];
         quads[quads.length - 1] = quads[quads.length - 1 - i];
         quads[quads.length - 1 - i] = q;
       }
-    }
-
-    // Visit this point. (Visiting coincident points isn’t necessary!)
-    else {
+    } else {
       var dx = x - +this._x.call(null, node.data),
           dy = y - +this._y.call(null, node.data),
           d2 = dx * dx + dy * dy;

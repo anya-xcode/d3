@@ -1,4 +1,3 @@
-// TODO Consolidate with PlotRender.
 export default function deferRender(node, render) {
   let observer;
   let idling;
